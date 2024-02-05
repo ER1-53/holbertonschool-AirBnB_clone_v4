@@ -89,6 +89,10 @@ button:hover {
 .popover ul li{
     padding: 4px;
     padding-left: 10px;
+    margin-left: 10px;
+}
+.popover ul li input{
+    margin-left: 10px;
 }
 
 .popover ul h2{
