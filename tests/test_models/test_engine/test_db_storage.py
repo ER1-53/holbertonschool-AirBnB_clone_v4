@@ -16,8 +16,9 @@ from models.state import State
 from models.user import User
 import json
 import os
-import pycodestyle
+import pep8
 import unittest
+from models import storage
 DBStorage = db_storage.DBStorage
 classes = {"Amenity": Amenity, "City": City, "Place": Place,
            "Review": Review, "State": State, "User": User}
@@ -30,18 +31,17 @@ class TestDBStorageDocs(unittest.TestCase):
         """Set up for the doc tests"""
         cls.dbs_f = inspect.getmembers(DBStorage, inspect.isfunction)
 
-    def test_pycodestyle_conformance_db_storage(self):
-        """Test that models/engine/db_storage.py conforms to pycodestyle."""
-        pycodestyles = pycodestyle.StyleGuide(quiet=True)
-        result = pycodestyles.check_files(['models/engine/db_storage.py'])
+    def test_pep8_conformance_db_storage(self):
+        """Test that models/engine/db_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['models/engine/db_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
 
-    def test_pycodestyle_conformance_test_db_storage(self):
-        """Test tests/test_models/test_db_storage.py
-        conforms to pycodestyle."""
-        pycodestyles = pycodestyle.StyleGuide(quiet=True)
-        result = pycodestyles.check_files(['tests/test_models/test_engine/\
+    def test_pep8_conformance_test_db_storage(self):
+        """Test tests/test_models/test_db_storage.py conforms to PEP8."""
+        pep8s = pep8.StyleGuide(quiet=True)
+        result = pep8s.check_files(['tests/test_models/test_engine/\
 test_db_storage.py'])
         self.assertEqual(result.total_errors, 0,
                          "Found code style errors (and warnings).")
@@ -88,25 +88,23 @@ class TestFileStorage(unittest.TestCase):
     def test_save(self):
         """Test that save properly saves objects to file.json"""
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
-    def test_get(self):
-        """Test the get() function creates a new object of any class
-        and checks if the object saves correctly"""
-        state = State()
-        state.name = "State_name"
-        storage = models.storage
-        storage.new(state)
+    def test_get_db(self):
+        """ Tests method for obtaining an instance db storage"""
+        dic = {"name": "Cundinamarca"}
+        instance = State(**dic)
+        storage.new(instance)
         storage.save()
-        self.assertTrue(storage.get(State, state.id))
-        self.assertEqual(storage.get(State, state.id), state)
-        storage.close()
+        get_instance = storage.get(State, instance.id)
+        self.assertEqual(get_instance, instance)
 
-    @unittest.skipIf(models.storage_t != 'db', "not testing db storage")
     def test_count(self):
-        """Test the count() function"""
-        state = State()
-        state.name = "State_name"
-        storage = models.storage
+        """ Tests count method db storage """
+        dic = {"name": "Vecindad"}
+        state = State(**dic)
         storage.new(state)
+        dic = {"name": "Mexico", "state_id": state.id}
+        city = City(**dic)
+        storage.new(city)
         storage.save()
-        self.assertTrue(storage.count(State) > 0)
+        c = storage.count()
+        self.assertEqual(len(storage.all()), c)
