@@ -2,8 +2,8 @@ $(document).ready(function() {
     var amenities = {};  // Créer un objet pour stocker les ID des commodités cochées
 
     $('input').on('change', function() {
-        var amenityId = $(this).data('id');  // Obtenir l'ID de la commodité
-        var amenityName = $(this).data('name');  // Obtenir le nom de la commodité
+        let amenityId = $(this).data('id');  // Obtenir l'ID de la commodité
+        let amenityName = $(this).data('name');  // Obtenir le nom de la commodité
 
         if ($(this).is(':checked')) {
             // Si la case est cochée, ajouter l'ID de la commodité à l'objet
@@ -14,12 +14,25 @@ $(document).ready(function() {
         }
 
         // Mettre à jour le tag h4 avec la liste des commodités cochées
-        var amenitiesList = Object.values(amenities).join(', ');
-        var longueurMax = 35;
+        let amenitiesList = Object.values(amenities).join(', ');
+        let longueurMax = 35;
         if (amenitiesList.length > longueurMax) {
             amenitiesList = amenitiesList.substring(0, longueurMax) + '...';
         }
         $('.amenities > h4').text(amenitiesList);
 	});
 });
+
+$(document).ready(function() {
+    $.get('http://127.0.0.1:5001/api/v1/status', function(data, textStatus) {
+        if (textStatus === 'success') {
+            if (data.status === 'OK') {
+            $('#api_status').addClass('available');
+        } else {
+            $('#api_status').removeClass('available');
+        }
+    }
+    })
+})
+
 

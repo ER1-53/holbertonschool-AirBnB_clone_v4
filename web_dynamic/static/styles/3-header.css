@@ -3,9 +3,27 @@ header {
     height: 70px;
     width: 100%;
     border-bottom: 1px solid #CCCCCC;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
-header .logo {
+.logo {
     background: url("../images/logo.png") no-repeat;
     left: 20px;
     height: 100%;
+    width: 100%;
+    margin-left: 30px;
+}
+
+
+header div:nth-child(2) {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #cccccc;
+    margin-right: 30px;
+}
+
+.available {
+    background-color: #ff545f !important;
 }
